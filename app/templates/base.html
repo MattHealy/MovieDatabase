@@ -1,0 +1,41 @@
+{% extends "bootstrap/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {% block title %}
+    {% if title %}
+    {{title}}
+    {% else %}
+    DVD
+    {% endif %}
+    {% endblock %}
+
+    {% block metas %}
+    {{ super() }}
+    {% endblock %}
+
+    {% block styles %}
+    {{ super() }}
+    {% endblock %}
+
+</head>
+<body>
+{% block body %}
+
+    {% block navbar %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {% endblock %}
+
+{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+      <div class="row">
+
+          <div class="box box-info">
+              <div class="box-header with-border">
+                  <h3 class="box-title">Add Entry</h3>
+              </div>
+            <form class="form-horizontal">
+
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="title" class="col-sm-1 control-label">Title</label>
+                  <div class="col-sm-11">
+                    {{ form.title(class="form-control", placeholder="Title", required="required", autofocus="autofocus") }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-info pull-right">Search</button>
+              </div>
+
+            </form>
+
+      </div>
+      <!-- /.row-->
+
+  {% if movies %}
+
+
+    {% for movie in movies %}
+
+      {% if loop.first or loop.index0 % 4 == 0 %}
+      <div class="row">
+      {% endif %}
+          <div class="col-md-3">
+            <div class="box box-info text-center">
+              <h4>{{ movie.title }} <small>({{ movie.year }})</small></h4>
+              {% if movie.image %}
+                  <img src="{{ movie.image }}" width="100" /> <br />
+              {% endif %}
+            </div>
+          </div>
+          <!-- /.col-md-3-->
+      {% if loop.last or ((loop.index0 + 1) % 4 == 0 and not loop.first) %}
+      </div>
+      <!-- /.row-->
+      {% endif %}
+
+    {% endfor %}
+
+
+  {% endif %}
+
+
+{% endblock %}

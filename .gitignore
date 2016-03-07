@@ -1,0 +1,13 @@
+app.db
+app-dev.db
+app-test.db
+.env
+test.db
+*.log
+*.pot
+*.pyc
+app/*.pyc
+tmp/*
+celerybeat-schedule
+celerybeat.pid
+deploy.sh

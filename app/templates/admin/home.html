@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+
+  {% for movie in movies %}
+
+      {% if loop.first or loop.index0 % 3 == 0 %}
+      <div class="row">
+      {% endif %}
+          <div class="col-md-4">
+              <h2>{{ movie.title }} <small>({{ movie.year }})</small></h2>
+              <a href="http://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank"><img src="{{ movie.image }}" width="300" /></a>
+          </div>
+          <!-- /.col-md-4-->
+      {% if loop.last or ((loop.index0 + 1) % 3 == 0 and not loop.first) %}
+      </div>
+      <!-- /.row-->
+      {% endif %}
+
+  {% endfor %}
+
+
+{% endblock %}
