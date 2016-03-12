@@ -52,7 +52,7 @@
 
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="{{ url_for('admin.home') }}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini">MDB</span>
           <!-- logo for regular state and mobile devices -->
@@ -139,7 +139,7 @@
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
+            <li class="header">MENU</li>
             <li class="active treeview">
               <a href="#">
                 <i class="fa fa-book"></i> <span>Library</span>
@@ -150,7 +150,7 @@
                 <li><a href="{{ url_for('admin.add_entry') }}"><i class="fa fa-circle-o"></i> Add Entry</a></li>
               </ul>
             </li>
-            <li><a href="#"><i class="fa fa-book"></i> <span>Help</span></a></li>
+            <li><a href="#"><i class="fa fa-question"></i> <span>Help</span></a></li>
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -165,17 +165,22 @@
                 {{ title }}
                 <small>{{ subtitle }}</small>
              </h1>
+             <!--
              <ol class="breadcrumb">
                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                <li><a href="#">UI</a></li>
                <li class="active">Buttons</li>
              </ol>
+             -->
         </section>
 
     <!-- Main content -->
     <section class="content">
 
        <div class="container-fluid">
+
+        {% include "_flash.html" %}
+
         {% block content %}
 
         {% endblock %}
@@ -187,9 +192,9 @@
       </div><!-- /.content-wrapper -->
       <footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
+          <b>Version</b> 1.0.0
         </div>
-        <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2016 <a href="https://www.matthealy.com.au" target="_blank">Matt Healy Web Solutions</a>.</strong> All rights reserved.
       </footer>
 
       <!-- Control Sidebar -->

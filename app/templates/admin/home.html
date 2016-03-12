@@ -2,6 +2,11 @@
 
 {% block content %}
 
+  <div class="row">
+      <div class="col-md-4">
+          {{ sortform.order_by }}
+      </div>
+  </div>
 
   {% for movie in movies %}
 
@@ -20,5 +25,16 @@
 
   {% endfor %}
 
+{% endblock %}
+
+{% block scripts %}
+
+{{ super() }}
+
+<script>
+   $('#order_by').change(function() {
+      window.location.href = "{{ url_for('admin.home')}}?order_by=" + $(this).val();
+   });
+</script>
 
 {% endblock %}

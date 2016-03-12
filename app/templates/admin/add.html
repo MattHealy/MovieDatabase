@@ -6,7 +6,7 @@
 
           <div class="box box-info">
               <div class="box-header with-border">
-                  <h3 class="box-title">Add Entry</h3>
+                  <h3 class="box-title">Search for Title</h3>
               </div>
             <form class="form-horizontal">
 
@@ -37,11 +37,18 @@
       <div class="row">
       {% endif %}
           <div class="col-md-3">
-            <div class="box box-info text-center">
-              <h4>{{ movie.title }} <small>({{ movie.year }})</small></h4>
+            <div class="box box-info text-center" style="padding-bottom: 10px;">
+              <h4><a href="http://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">{{ movie.title }}</a> <small>({{ movie.year }})</small></h4>
+
               {% if movie.image %}
-                  <img src="{{ movie.image }}" width="100" /> <br />
+                  <img src="{{ movie.image }}" width="100" />
               {% endif %}
+              <br /><br />
+              <form method="post" action="{{ url_for('admin.submit_entry', imdb_id=movie.imdb_id) }}">
+                  {{ addform.hidden_tag() }}
+                  <button type="submit" class="btn btn-primary">Add</button>
+              </form>
+
             </div>
           </div>
           <!-- /.col-md-3-->
