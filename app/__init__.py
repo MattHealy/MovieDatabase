@@ -35,7 +35,7 @@ def create_app(config_name):
 
     db.init_app(app)
     lm.init_app(app)
-    toolbar.init_app(app)
+    #toolbar.init_app(app)
     mail.init_app(app)
     bootstrap.init_app(app)
     moment.init_app(app)
