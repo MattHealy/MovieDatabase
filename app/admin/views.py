@@ -182,7 +182,12 @@ def submit_entry(imdb_id):
         db.session.add(entry)
         db.session.commit()
 
-        flash(Markup('Entry added successfully. <strong><a href="' + url_for('admin.add_entry') + '">Add another?</a></strong>'))
+        if wishlist:
+            message = Markup('Entry added successfully. <strong><a href="' + url_for('admin.add_wishlist') + '">Add another?</a></strong>')
+        else:
+            message = Markup('Entry added successfully. <strong><a href="' + url_for('admin.add_entry') + '">Add another?</a></strong>')
+
+        flash(message)
 
         if wishlist:
             return redirect(url_for('admin.wishlist'))
