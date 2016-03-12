@@ -1,6 +1,6 @@
 from flask import g, current_app
 from flask.ext.wtf import Form
-from wtforms import TextField, SubmitField, SelectField
+from wtforms import TextField, SubmitField, SelectField, HiddenField
 from wtforms.validators import Required 
 
 class TitleSearchForm(Form):
@@ -8,6 +8,7 @@ class TitleSearchForm(Form):
     submit = SubmitField('Search')
 
 class AddEntryForm(Form):
+    wishlist = HiddenField('wishlist')
     submit = SubmitField('Add')
 
 class LibrarySortForm(Form):

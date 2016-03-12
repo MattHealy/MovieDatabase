@@ -140,7 +140,7 @@
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
             <li class="header">MENU</li>
-            <li class="active treeview">
+            <li class="{% if request.path == '/app/home/' %}active {% endif %}treeview">
               <a href="#">
                 <i class="fa fa-book"></i> <span>Library</span>
                 <i class="fa fa-angle-left pull-right"></i>
@@ -148,6 +148,16 @@
               <ul class="treeview-menu">
                 <li><a href="{{ url_for('admin.home') }}"><i class="fa fa-circle-o"></i> View Library</a></li>
                 <li><a href="{{ url_for('admin.add_entry') }}"><i class="fa fa-circle-o"></i> Add Entry</a></li>
+              </ul>
+            </li>
+            <li class="{% if request.path == '/app/wishlist/' %}active {% endif %}treeview">
+              <a href="#">
+                <i class="fa fa-star"></i> <span>Wishlist</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ url_for('admin.wishlist') }}"><i class="fa fa-circle-o"></i> View Wishlist</a></li>
+                <li><a href="{{ url_for('admin.add_wishlist') }}"><i class="fa fa-circle-o"></i> Add Entry</a></li>
               </ul>
             </li>
             <li><a href="#"><i class="fa fa-question"></i> <span>Help</span></a></li>

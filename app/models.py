@@ -76,6 +76,7 @@ class Entry(db.Model):
     imdb_id = db.Column(db.String(20))
     year = db.Column(db.Integer)
     image = db.Column(db.String(256))
+    wishlist = db.Column(db.Boolean)
 
     def __repr__(self):
         return '<Entry %r (%r)>' % (self.title, self.year)

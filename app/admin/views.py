@@ -38,7 +38,7 @@ def home():
     if not g.user.is_confirmed():
         return redirect(url_for('admin.unconfirmed'))
 
-    movies = Entry.query.filter_by(user_id = g.user.id)
+    movies = Entry.query.filter_by(user_id = g.user.id, wishlist = 0)
 
     order_by = request.args.get('order_by', 'title')
 
@@ -61,6 +61,36 @@ def home():
     return render_template("admin/home.html", title="My Collection", subtitle="Home", movies=movies,
                            sortform=sortform)
 
+@admin.route('/wishlist/', methods=['GET','POST'])
+@login_required
+def wishlist():
+
+    if not g.user.is_confirmed():
+        return redirect(url_for('admin.unconfirmed'))
+
+    movies = Entry.query.filter_by(user_id = g.user.id, wishlist = 1)
+
+    order_by = request.args.get('order_by', 'title')
+
+    sortform = LibrarySortForm()
+    sortform.order_by.data = order_by
+
+    if order_by == 'timestamp':
+        movies = movies.order_by(Entry.timestamp)
+    elif order_by == 'timestampDesc':
+        movies = movies.order_by(Entry.timestamp.desc())
+    elif order_by == 'year':
+        movies = movies.order_by(Entry.year)
+    elif order_by == 'yearDesc':
+        movies = movies.order_by(Entry.year.desc())
+    elif order_by == 'titleDesc':
+        movies = movies.order_by(Entry.title.desc())
+    else:
+        movies = movies.order_by(Entry.title)
+
+    return render_template("admin/home.html", title="Wishlist", subtitle="Home", movies=movies,
+                           sortform=sortform)
+
 @admin.route('/entry/add/', methods=['GET','POST'])
 @login_required
 def add_entry():
@@ -70,6 +100,7 @@ def add_entry():
 
     form = TitleSearchForm()
     addform = AddEntryForm()
+    addform.wishlist.data = 0
     movies = []
 
     if request.args.get('title'):
@@ -89,6 +120,35 @@ def add_entry():
     return render_template("admin/add.html", form=form, title="Add Entry", subtitle="Search", \
                            movies=movies, addform = addform)
 
+@admin.route('/wishlist/add/', methods=['GET','POST'])
+@login_required
+def add_wishlist():
+
+    if not g.user.is_confirmed():
+        return redirect(url_for('admin.unconfirmed'))
+
+    form = TitleSearchForm()
+    addform = AddEntryForm()
+    addform.wishlist.data = 1
+    movies = []
+
+    if request.args.get('title'):
+
+        form.title.data = request.args.get('title')
+        res = omdb.search(request.args.get('title'))
+
+        for item in res:
+            movie = {}
+            movie['title'] = item['title']
+            movie['year'] = item['year']
+            if item['poster'] != 'N/A':
+                movie['image'] = item['poster']
+            movie['imdb_id'] = item['imdb_id']
+            movies.append(movie)
+
+    return render_template("admin/add.html", form=form, title="Add to Wishlist", subtitle="Search", \
+                           movies=movies, addform = addform)
+
 @admin.route('/entry/add/<imdb_id>/', methods=['POST'])
 @login_required
 def submit_entry(imdb_id):
@@ -96,32 +156,38 @@ def submit_entry(imdb_id):
     if not g.user.is_confirmed():
         return redirect(url_for('admin.unconfirmed'))
 
-    res = omdb.imdbid(imdb_id)
+    form = AddEntryForm()
 
-    entry = Entry.query.filter_by(user_id = g.user.id, imdb_id = imdb_id).first()
+    if form.validate_on_submit():
 
-    if entry:
-        flash('This entry already exists in your collection')
-        return redirect(url_for('admin.home'))
+        res = omdb.imdbid(imdb_id)
 
-    entry = Entry(user_id = g.user.id, timestamp = datetime.utcnow())
+        wishlist = form.wishlist.data
+        entry = Entry.query.filter_by(user_id = g.user.id, imdb_id = imdb_id).first()
 
-    title = res['title']
-    entry.title = res['title']
-    entry.year = res['year']
-    if res['poster'] != 'N/A':
-        entry.image = res['poster']
+        if entry:
+            flash('This entry already exists in your collection')
+            return redirect(url_for('admin.home'))
 
-    entry.imdb_id = res['imdb_id']
+        entry = Entry(user_id = g.user.id, timestamp = datetime.utcnow(), wishlist = wishlist)
 
-    #Item({'genre': 'Thriller', 'poster': 'http://ia.media-imdb.com/images/M/MV5BMTUwMDQxNjIxM15BMl5BanBnXkFtZTcwMzg5MzkwNA@@._V1_SX300.jpg', 'type': 'movie', 'imdb_votes': '202,075', 'year': '2007', 'runtime': '113 min', 'released': '31 May 2007', 'awards': '6 nominations.', 'actors': 'Kurt Russell, Zoë Bell, Rosario Dawson, Vanessa Ferlito', 'plot': 'Two separate sets of voluptuous women are stalked at different times by a scarred stuntman who uses his "death proof" cars to execute his murderous plans.', 'title': 'Death Proof', 'imdb_rating': '7.1', 'language': 'English', 'director': 'Quentin Tarantino', 'country': 'USA', 'response': 'True', 'metascore': 'N/A', 'imdb_id': 'tt1028528', 'rated': 'R', 'writer': 'Quentin Tarantino'})
+        title = res['title']
+        entry.title = res['title']
+        entry.year = res['year']
+        if res['poster'] != 'N/A':
+            entry.image = res['poster']
 
-    db.session.add(entry)
-    db.session.commit()
+        entry.imdb_id = res['imdb_id']
 
-    flash(Markup('Entry added successfully. <strong><a href="' + url_for('admin.add_entry') + '">Add another?</a></strong>'))
+        db.session.add(entry)
+        db.session.commit()
 
-    return redirect(url_for('admin.home'))
+        flash(Markup('Entry added successfully. <strong><a href="' + url_for('admin.add_entry') + '">Add another?</a></strong>'))
+
+        if wishlist:
+            return redirect(url_for('admin.wishlist'))
+        else:
+            return redirect(url_for('admin.home'))
 
 @admin.route('/confirmation_email/', methods=['GET'])
 @login_required
