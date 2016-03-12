@@ -33,7 +33,7 @@
 
 <script>
    $('#order_by').change(function() {
-      window.location.href = "{{ url_for('admin.home')}}?order_by=" + $(this).val();
+      window.location.href = "{{ request.path }}?order_by=" + $(this).val();
    });
 </script>
 
