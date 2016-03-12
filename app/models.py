@@ -19,7 +19,8 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean)
 
-    entries = db.relationship('Entry', backref='user', lazy='dynamic', cascade="all, delete")
+    entries = db.relationship('Entry', backref='user', lazy='dynamic', cascade="all, delete",
+                              order_by="Entry.title")
 
     def is_admin(self):
         if str(self.id) in current_app.config['ADMINS']:
