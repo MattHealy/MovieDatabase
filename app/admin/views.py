@@ -162,7 +162,12 @@ def submit_entry(imdb_id):
 
         res = omdb.imdbid(imdb_id)
 
-        wishlist = form.wishlist.data
+        wishlist = int(form.wishlist.data)
+        if wishlist == 1:
+            wishlist = True
+        else:
+            wishlist = False
+
         entry = Entry.query.filter_by(user_id = g.user.id, imdb_id = imdb_id).first()
 
         if entry:
