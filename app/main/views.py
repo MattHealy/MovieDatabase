@@ -62,7 +62,6 @@ def register():
         token = user.generate_token()
         send_email(form.email.data.strip(), 'Confirm Account','mail/confirm_account', user=user, token=token)
         send_email(current_app.config['ADMIN_EMAIL'], 'New User','mail/new_user', user=user)
-        reminder_email.apply_async(args=[user.id], countdown=60*60*24)
 
         return redirect(url_for('admin.unconfirmed'))
 
