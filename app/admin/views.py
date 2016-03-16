@@ -38,7 +38,7 @@ def home():
     if not g.user.is_confirmed():
         return redirect(url_for('admin.unconfirmed'))
 
-    movies = Entry.query.filter_by(user_id = g.user.id, wishlist = 0)
+    movies = Entry.query.filter_by(user_id = g.user.id, wishlist = False)
 
     order_by = request.args.get('order_by', 'title')
 
@@ -68,7 +68,7 @@ def wishlist():
     if not g.user.is_confirmed():
         return redirect(url_for('admin.unconfirmed'))
 
-    movies = Entry.query.filter_by(user_id = g.user.id, wishlist = 1)
+    movies = Entry.query.filter_by(user_id = g.user.id, wishlist = True)
 
     order_by = request.args.get('order_by', 'title')
 
