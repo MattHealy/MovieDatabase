@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+      <div class="error-page">
+        <h2 class="headline text-yellow"> Internal Server Error</h2>
+
+        <div class="error-content">
+          <h3><i class="fa fa-warning text-yellow"></i> Sorry, an error has occurred.</h3>
+
+          <p>
+            Please <a href="{{ url_for('admin.home') }}">return to dashboard.</a>
+          </p>
+
+        </div>
+        <!-- /.error-content -->
+      </div>
+      <!-- /.error-page -->
+
+{% endblock %}
