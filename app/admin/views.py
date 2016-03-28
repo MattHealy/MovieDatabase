@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, g, current_app, session, \
                   abort, Markup
-from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask.ext.login import logout_user, current_user, login_required
 from datetime import datetime, timedelta, date
 from itsdangerous import JSONWebSignatureSerializer
 from . import admin
@@ -21,6 +21,12 @@ def before_request():
         g.user.last_seen = datetime.utcnow()
         db.session.add(g.user)
         db.session.commit()
+
+@admin.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('main.index'))
 
 @admin.route('/unconfirmed/', methods=['GET'])
 @login_required
