@@ -174,7 +174,7 @@ def submit_entry(imdb_id):
         else:
             wishlist = False
 
-        entry = Entry.query.filter_by(user_id = g.user.id, imdb_id = imdb_id).first()
+        entry = Entry.query.filter_by(user_id = g.user.id, imdb_id = imdb_id, wishlist = wishlist).first()
 
         if entry:
             flash('This entry already exists in your collection')
